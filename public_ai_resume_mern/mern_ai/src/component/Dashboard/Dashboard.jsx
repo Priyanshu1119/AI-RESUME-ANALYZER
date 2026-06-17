@@ -7,7 +7,7 @@ import axios from '../../utils/axios';
 import { useContext } from 'react';
 import { AuthContext } from '../../utils/AuthContext';
 
-const Dashboard = () => {
+const Dashboard = ({ darkMode }) => {
     const [uploadFiletext, setUploadFileText] = useState("Upload your resume");
     const [loading, setLoading] = useState(false);
     const [resumeFile, setResumeFile] = useState(null);
@@ -60,19 +60,31 @@ const Dashboard = () => {
         return 'Poor Match ❌';
     }
 
+    const cardStyle = {
+        background: darkMode ? '#1e293b' : '#ffffff',
+        color: darkMode ? '#f1f5f9' : '#0f172a',
+        transition: 'all 0.3s ease',
+        borderRadius: '20px',
+        padding: '20px',
+        marginBottom: '16px'
+    }
+
     return (
-        <div className={styles.Dashboard}>
+        <div className={styles.Dashboard} style={{
+            background: darkMode ? '#0f172a' : '#f1f5f9',
+            transition: 'all 0.3s ease'
+        }}>
             <div className={styles.DashboardLeft}>
-                <div className={styles.DashboardHeader}>
-                    <h2>AI Resume Analyzer</h2>
+                <div className={styles.DashboardHeader} style={cardStyle}>
+                    <h2 style={{ color: darkMode ? '#f1f5f9' : '#0f172a' }}>AI Resume Analyzer</h2>
                 </div>
 
                 <div className={styles.alertInfo}>
-                    {!resumeFile && <p>Please upload your resume to get started.</p>}
+                    {!resumeFile && <p style={{ color: darkMode ? '#94a3b8' : '#64748b' }}>Please upload your resume to get started.</p>}
                 </div>
 
-                <div className={styles.DashboardUploadResume}>
-                    <label htmlFor="resumeUpload" className={styles.uploadLabel}>
+                <div className={styles.DashboardUploadResume} style={cardStyle}>
+                    <label htmlFor="resumeUpload" className={styles.uploadLabel} style={{ color: darkMode ? '#f1f5f9' : '#0f172a' }}>
                         <CreditScoreIcon sx={{ fontSize: 22 }} />
                         {uploadFiletext}
                     </label>
@@ -85,7 +97,7 @@ const Dashboard = () => {
                     />
                 </div>
 
-                <div className={styles.jobDesc}>
+                <div className={styles.jobDesc} style={cardStyle}>
                     <textarea
                         value={jobDesc}
                         onChange={(e) => setJobDesc(e.target.value)}
@@ -93,6 +105,12 @@ const Dashboard = () => {
                         placeholder='Paste Your Job Description'
                         rows={10}
                         cols={50}
+                        style={{
+                            background: darkMode ? '#0f172a' : '#ffffff',
+                            color: darkMode ? '#f1f5f9' : '#0f172a',
+                            border: darkMode ? '1px solid #334155' : '1px solid #e2e8f0',
+                            transition: 'all 0.3s ease'
+                        }}
                     />
                     <div className={styles.AnalyzeBtn} onClick={handleUpload}>
                         {loading ? "Analyzing..." : "Analyze"}
@@ -101,35 +119,34 @@ const Dashboard = () => {
             </div>
 
             <div className={styles.DashboardRight}>
-                <div className={styles.DashboardRightTopCard}>
-                    <div>Analyze With AI</div>
-                    <img
-                        className={styles.profileImg}
-                        src={userInfo?.photo || avatarUrl}
-                        alt="profile"
-                        onError={(e) => { e.target.src = avatarUrl }}
-                    />
-                    <h2>{userInfo?.name}</h2>
+                <div style={cardStyle}>
+                    <div style={{ textAlign: 'center', marginBottom: '10px', color: darkMode ? '#94a3b8' : '#64748b' }}>Analyze With AI</div>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <img
+                            className={styles.profileImg}
+                            src={userInfo?.photo || avatarUrl}
+                            alt="profile"
+                            onError={(e) => { e.target.src = avatarUrl }}
+                        />
+                    </div>
+                    <h2 style={{ textAlign: 'center', color: darkMode ? '#f1f5f9' : '#0f172a' }}>{userInfo?.name}</h2>
                 </div>
 
                 {result && (
-                    <div className={styles.DashboardRightTopCard}>
-                        <div>Result</div>
+                    <div style={cardStyle}>
+                        <div style={{ textAlign: 'center', marginBottom: '10px', color: darkMode ? '#94a3b8' : '#64748b' }}>Result</div>
 
-                        {/* Score Label */}
-                        <p style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '16px', marginBottom: '6px' }}>
+                        <p style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '16px', marginBottom: '6px', color: darkMode ? '#f1f5f9' : '#0f172a' }}>
                             {getScoreLabel(result?.score)}
                         </p>
 
-                        {/* Score Number */}
                         <p style={{ textAlign: 'center', fontSize: '28px', fontWeight: 'bold', color: getScoreColor(result?.score), margin: '4px 0' }}>
                             {result?.score}/100
                         </p>
 
-                        {/* Progress Bar */}
                         <div style={{
                             width: '100%',
-                            backgroundColor: '#e5e7eb',
+                            backgroundColor: darkMode ? '#334155' : '#e5e7eb',
                             borderRadius: '999px',
                             height: '12px',
                             margin: '10px 0 16px 0',
@@ -144,10 +161,9 @@ const Dashboard = () => {
                             }} />
                         </div>
 
-                        {/* Feedback */}
-                        <p style={{ fontSize: '13px', color: '#374151', lineHeight: '1.6' }}>
-    <strong>Feedback:</strong> {result?.feedback?.replace(/\*\*/g, '').replace(/\*/g, '').replace(/#/g, '')}
-</p>
+                        <p style={{ fontSize: '13px', color: darkMode ? '#cbd5e1' : '#374151', lineHeight: '1.6' }}>
+                            <strong>Feedback:</strong> {result?.feedback?.replace(/\*\*/g, '').replace(/\*/g, '').replace(/#/g, '')}
+                        </p>
                     </div>
                 )}
 
