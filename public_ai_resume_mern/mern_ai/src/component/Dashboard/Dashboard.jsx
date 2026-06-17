@@ -146,8 +146,8 @@ const Dashboard = () => {
 
                         {/* Feedback */}
                         <p style={{ fontSize: '13px', color: '#374151', lineHeight: '1.6' }}>
-                            <strong>Feedback:</strong> {result?.feedback?.replace(/\*\*/g, '')}
-                        </p>
+    <strong>Feedback:</strong> {result?.feedback?.replace(/\*\*/g, '').replace(/\*/g, '').replace(/#/g, '')}
+</p>
                     </div>
                 )}
 
